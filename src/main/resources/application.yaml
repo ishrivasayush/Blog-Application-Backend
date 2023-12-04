@@ -1,0 +1,15 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/blog_application
+    password: Narainox@123
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
