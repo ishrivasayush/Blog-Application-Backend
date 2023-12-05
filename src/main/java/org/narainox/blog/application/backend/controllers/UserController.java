@@ -1,5 +1,7 @@
 package org.narainox.blog.application.backend.controllers;
 
+import jakarta.validation.Valid;
+import org.narainox.blog.application.backend.payloads.ApiResponse;
 import org.narainox.blog.application.backend.payloads.UserDto;
 import org.narainox.blog.application.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto)
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
     {
         UserDto user = userService.createUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUserHandler(@RequestBody UserDto userDto,@PathVariable Long userId)
+    public ResponseEntity<UserDto> updateUserHandler(@Valid @RequestBody UserDto userDto,@PathVariable Long userId)
     {
         UserDto user = userService.updateUser(userDto,userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -44,10 +46,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> getAllUserHandler(@PathVariable Long userId)
+    public ResponseEntity<ApiResponse> getAllUserHandler(@PathVariable Long userId)
     {
         userService.deleteUser(userId);
-        return new ResponseEntity<>("User Deleted !", HttpStatus.FOUND);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("User Deleted",true), HttpStatus.ACCEPTED);
     }
 
 
