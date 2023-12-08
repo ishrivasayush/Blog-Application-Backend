@@ -1,11 +1,11 @@
 server:
-  port: 9090
+  port: 8080
 
 spring:
   datasource:
     username: root
     url: jdbc:mysql://localhost:3306/blog_application
-    password: Narainox@123
+    password: ayush@123
 
   jpa:
     hibernate:
