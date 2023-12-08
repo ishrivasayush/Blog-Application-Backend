@@ -13,10 +13,11 @@ import org.narainox.blog.application.backend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class PostImpl implements PostService {
+public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
@@ -27,8 +28,18 @@ public class PostImpl implements PostService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public Post createPost(PostDto postDto) {
-        return postRepository.save(modelMapper.map(postDto,Post.class));
+    public PostDto createPost(PostDto postDto,Integer categoryId,Long userId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Category", categoryId));
+        User user=userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user","UserId",userId));
+        Post post=modelMapper.map(postDto,Post.class);
+
+        post.setImageName("Default.png");
+        post.setUser(user);
+        post.setAddedDate(new Date());
+        post.setCategory(category);
+
+        Post save = postRepository.save(post);
+        return modelMapper.map(save,PostDto.class);
     }
     @Override
     public String deletePost(Integer postId) {
@@ -70,6 +81,7 @@ public class PostImpl implements PostService {
 
     @Override
     public List<Post> searchPost(String keyword) {
+
         return null;
     }
 }
