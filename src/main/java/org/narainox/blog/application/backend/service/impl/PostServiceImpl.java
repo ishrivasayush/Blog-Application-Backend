@@ -13,6 +13,7 @@ import org.narainox.blog.application.backend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,38 +50,57 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(PostDto postDto, Integer postId) {
+    public PostDto updatePost(PostDto postDto, Integer postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
         post.setContent(modelMapper.map(post,PostDto.class).getContent());
         post.setTitle(modelMapper.map(post,PostDto.class).getTitle());
-        return postRepository.save(post);
+        Post save = postRepository.save(post);
+        return modelMapper.map(post,PostDto.class);
     }
 
     @Override
-    public Post getPostById(Integer postId) {
+    public PostDto getPostById(Integer postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "Post id", postId));
-        return post;
+        return modelMapper.map(post,PostDto.class);
     }
 
     @Override
-    public List<Post> getAllPost() {
-        return postRepository.findAll();
+    public List<PostDto> getAllPost() {
+        List<Post> posts = postRepository.findAll();
+        List<PostDto> postDtos=new ArrayList<>();
+        for (Post post:posts)
+        {
+            postDtos.add(modelMapper.map(post,PostDto.class));
+        }
+        return postDtos;
     }
 
     @Override
-    public List<Post> getPostByCategory(Integer categoryId) {
+    public List<PostDto> getPostByCategory(Integer categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Category", categoryId));
-        return postRepository.findByCategory(category);
+        List<Post> posts = postRepository.findByCategory(category);
+        List<PostDto> postDtos=new ArrayList<>();
+        for (Post post:posts)
+        {
+            postDtos.add(modelMapper.map(post,PostDto.class));
+        }
+        return postDtos;
     }
 
     @Override
-    public List<Post> getPostByUser(Long userId) {
+    public List<PostDto> getPostByUser(Long userId) {
         User user=userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user","UserId",userId));
-        return postRepository.findByUser(user);
+        List<Post> posts = postRepository.findByUser(user);
+        List<PostDto> postDtos=new ArrayList<>();
+        for (Post post:posts)
+        {
+            postDtos.add(modelMapper.map(post,PostDto.class));
+        }
+        return postDtos;
     }
 
     @Override
-    public List<Post> searchPost(String keyword) {
+    public List<PostDto> searchPost(String keyword) {
 
         return null;
     }
