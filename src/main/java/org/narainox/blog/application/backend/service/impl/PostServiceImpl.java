@@ -11,6 +11,9 @@ import org.narainox.blog.application.backend.repository.PostRepository;
 import org.narainox.blog.application.backend.repository.UserRepository;
 import org.narainox.blog.application.backend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -65,8 +68,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostDto> getAllPost(Integer pageNumber,Integer pageSize) {
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+        Page<Post> posts = postRepository.findAll(pageable);
         List<PostDto> postDtos=new ArrayList<>();
         for (Post post:posts)
         {

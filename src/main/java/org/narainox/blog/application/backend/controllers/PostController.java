@@ -1,5 +1,4 @@
 package org.narainox.blog.application.backend.controllers;
-import org.narainox.blog.application.backend.entity.Post;
 import org.narainox.blog.application.backend.payloads.ApiResponse;
 import org.narainox.blog.application.backend.payloads.PostDto;
 import org.narainox.blog.application.backend.service.PostService;
@@ -45,9 +44,11 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPost()
+    public ResponseEntity<List<PostDto>> getAllPost(
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false)Integer pageSize)
     {
-        List<PostDto> users = postService.getAllPost();
+        List<PostDto> users = postService.getAllPost(pageNumber,pageSize);
         return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
