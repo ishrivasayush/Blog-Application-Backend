@@ -1,6 +1,7 @@
 package org.narainox.blog.application.backend.controllers;
 import org.narainox.blog.application.backend.payloads.ApiResponse;
 import org.narainox.blog.application.backend.payloads.PostDto;
+import org.narainox.blog.application.backend.payloads.PostResponse;
 import org.narainox.blog.application.backend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,12 +45,12 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPost(
+    public ResponseEntity<PostResponse> getAllPost(
             @RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
             @RequestParam(value = "pageSize",defaultValue = "10",required = false)Integer pageSize)
     {
-        List<PostDto> users = postService.getAllPost(pageNumber,pageSize);
-        return new ResponseEntity<>(users,HttpStatus.OK);
+        PostResponse postResponse = postService.getAllPost(pageNumber,pageSize);
+        return new ResponseEntity<>(postResponse,HttpStatus.OK);
     }
 
     @GetMapping("/post/{postId}")

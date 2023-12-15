@@ -6,6 +6,7 @@ import org.narainox.blog.application.backend.entity.Post;
 import org.narainox.blog.application.backend.entity.User;
 import org.narainox.blog.application.backend.exception.ResourceNotFoundException;
 import org.narainox.blog.application.backend.payloads.PostDto;
+import org.narainox.blog.application.backend.payloads.PostResponse;
 import org.narainox.blog.application.backend.repository.CategoryRepository;
 import org.narainox.blog.application.backend.repository.PostRepository;
 import org.narainox.blog.application.backend.repository.UserRepository;
@@ -68,15 +69,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost(Integer pageNumber,Integer pageSize) {
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
         Pageable pageable= PageRequest.of(pageNumber,pageSize);
         Page<Post> posts = postRepository.findAll(pageable);
+        List<Post> content = posts.getContent();
+
         List<PostDto> postDtos=new ArrayList<>();
+
         for (Post post:posts)
         {
             postDtos.add(modelMapper.map(post,PostDto.class));
         }
-        return postDtos;
+
+        PostResponse postResponse=new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(posts.getNumber());
+        postResponse.setTotalElements(posts.getTotalElements());
+        postResponse.setLastPage(posts.isLast());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalPages(posts.getTotalPages());
+
+        return postResponse;
     }
 
     @Override
