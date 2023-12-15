@@ -9,7 +9,7 @@ public interface PostService {
     String deletePost(Integer PostId);
     PostDto updatePost(PostDto postDto,Integer postId);
     PostDto getPostById(Integer postId);
-    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize,String sortBy,String sortDirection);
     List<PostDto> getPostByCategory(Integer categoryId);
     List<PostDto> getPostByUser(Long userId);
     List<PostDto> searchPost(String keyword);
