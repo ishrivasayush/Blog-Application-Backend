@@ -1,4 +1,5 @@
 package org.narainox.blog.application.backend.controllers;
+import org.narainox.blog.application.backend.config.ApplicationContents;
 import org.narainox.blog.application.backend.payloads.ApiResponse;
 import org.narainox.blog.application.backend.payloads.PostDto;
 import org.narainox.blog.application.backend.payloads.PostResponse;
@@ -48,10 +49,10 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPost(
-            @RequestParam(value = "pageNumber",defaultValue = "0",required = false)Integer pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false)Integer pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "asc",required = false)String sortBy,
-            @RequestParam(value = "sortDirection",defaultValue = "asc",required = false) String sortByDirection
+            @RequestParam(value = "pageNumber",defaultValue = ApplicationContents.PAGE_NUMBER,required = false)Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue =ApplicationContents.PAGE_SIZE,required = false)Integer pageSize,
+            @RequestParam(value = "sortBy",defaultValue =ApplicationContents.SORT_BY,required = false)String sortBy,
+            @RequestParam(value = "sortDirection",defaultValue =ApplicationContents.SORT_BY,required = false) String sortByDirection
             )
     {
         PostResponse postResponse = postService.getAllPost(pageNumber,pageSize,sortBy,sortByDirection);
@@ -82,6 +83,10 @@ public class PostController {
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
 
-
-
+    @GetMapping("/post/search/{keyword}")
+    public ResponseEntity<List<PostDto>> searchPost(@PathVariable String keyword)
+    {
+        List<PostDto> postDtos = postService.searchPost(keyword);
+        return new ResponseEntity<>(postDtos,HttpStatus.FOUND);
+    }
 }
