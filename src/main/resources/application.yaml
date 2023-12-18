@@ -6,6 +6,11 @@ spring:
     username: root
     url: jdbc:mysql://localhost:3306/blog_application
     password: ayush@123
+  security :
+          user:
+            name: ayush
+            password: ayush@123
+            roles: ADMIN
 
   jpa:
     hibernate:
